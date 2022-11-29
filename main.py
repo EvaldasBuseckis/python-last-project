@@ -27,9 +27,14 @@ def test(word):
     while mistakes < 10:
         a = input("iveskite raide: ")
 
+
         if  a in word:
             if a not in good_letters:
                 good_letters.append(a)
+                if len(good_letters) == len(word):
+                    good_letters.append(a)
+                    print(f"You found all the letters and won the game! the word was ========> {word} <=========")
+                    break
             print(f"you found it, your answers: {good_letters} ")
         else:
             if a not in wrong_letters:
@@ -41,6 +46,7 @@ def test(word):
             else:
                 print(f"sita jau spejai, bet uz durnuma gauni papildoma klaida")
                 mistakes += 1
+        
                 
         
 
