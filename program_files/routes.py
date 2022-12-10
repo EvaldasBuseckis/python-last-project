@@ -1,14 +1,20 @@
-from program_files import app, db, bcrypt, forms, TOKEN
+from program_files import app, db, bcrypt, forms, TOKEN, functions
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
-from program_files.models import Transaction, User
+from program_files.models import Games, User
 from datetime import datetime, timedelta
 import requests
 from requests.exceptions import ConnectionError
 
+secret_word = None
+word_set = None
+to_display = None
+tries = None
+blanks = None
 
 @app.route("/")
 def index():
+    # print(current_user)
     return render_template("index.html")
 
 
@@ -58,35 +64,78 @@ def register():
 @app.route("/account_summary")
 @login_required
 def account_summary():
-    names = User.query.filter_by(id=current_user.id).all()
-    name = names[0]
-    print(type(name))
+    name = current_user.name
+
+    return render_template("summary.html", name=name)
+
+@app.route("/game_lost")
+@login_required
+def game_lost():
+    return render_template("game_lost.html")
+
+@app.route("/game_won")
+@login_required
+def game_won():
+    word = secret_word
+    return render_template("game_won.html", word=word)
 
 
-    transactions = Transaction.query.filter_by(user_id=current_user.id).all()
-    cash_balance = sum([transaction.transaction_amount for transaction in transactions])
-    all_stock_names = set(
-        [
-            transaction.stock_name
-            for transaction in transactions
-            if transaction.stock_name is not None
-        ]
-    )
-    stocks = {}
-    for stock in all_stock_names:
-        stock_quantity = sum(
-            [
-                transaction.stock_quantity
-                for transaction in transactions
-                if transaction.stock_name == stock
-            ]
-        )
-        if stock_quantity != 0:
-            stocks[stock] = stock_quantity
-    return render_template("summary.html", cash_balance=cash_balance, stocks=stocks, name=name)
+@app.route("/hangman")
+@login_required
+def hangman():
+    name = current_user.name
+    global secret_word
+    global word_set
+    global to_display
+    global tries
+    global blanks	
+    secret_word = functions.get_random_word()
+    word_set = "abcdefghijklmnopqrstuvwxyz"
+    blanks = 0
+    to_display = []
+    for i,char in enumerate(secret_word):
+        if char==" ":
+            to_display.append(" ")
+        else:
+            to_display.append("_")
+            blanks+=1
+    tries = 0
+    return render_template('hangman.html', name = name, to_display=to_display,word_set=word_set,tries="/static/img/hangman%d.png"%tries)
 
+@app.route('/add_char',methods=["POST"])
+def add_char():
+    global secret_word
+    global word_set
+    global to_display
+    global tries
+    global blanks	
 
+    letter = request.form["letter"]
+	
+    chance_lost = True
+    for i,char in enumerate(secret_word):
+        if char==letter:
+            chance_lost = False
+            to_display[i] = letter
+            blanks-=1
 
+    word_set = word_set.replace(letter,'')
+    print("blanks",blanks)
+    if chance_lost==True:
+        tries += 1
+
+        if tries==6:
+            game_outcome = Games(
+                game_outcome = "Lost"
+            )
+            db.session.add(game_outcome)
+            db.session.commit()
+            return redirect('/game_lost')
+
+    if blanks==0:
+        return redirect('/game_won')
+
+    return render_template('hangman.html',to_display=to_display,word_set=word_set,tries="/static/img/hangman%d.png"%tries)
 
 
 @app.route("/logout")

@@ -21,7 +21,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 db.create_all()
 
-from program_files.models import User, Transaction
+from program_files.models import User, Games
 
 bcrypt = Bcrypt(app)
 

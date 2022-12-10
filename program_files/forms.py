@@ -29,8 +29,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Log in")
 
 
-class StockShortNameForm(FlaskForm):
-    name = StringField("stock name", [DataRequired()])
+class GameForm(FlaskForm):
+    guessed_letter = StringField("stock name", [DataRequired()])
     submit = SubmitField("get price")
 
 

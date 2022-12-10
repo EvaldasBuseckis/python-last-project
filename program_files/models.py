@@ -12,18 +12,10 @@ class User(db.Model, UserMixin):
     password = db.Column("Password", db.String(100), nullable=False)
 
 
-class Transaction(db.Model, UserMixin):
-    __tablename__ = "transaction"
+class Games(db.Model, UserMixin):
+    __tablename__ = "game"
     id = db.Column(db.Integer, primary_key=True)
-    transaction_amount = db.Column("Transaction_amount", db.Float, nullable=False)
-    transaction_type = db.Column(
-        "Transaction_type", db.String(10), nullable=False
-    )  # BUY / SELL / TOP UP
-    stock_name = db.Column("Stock_name", db.String(20), nullable=True)
-    stock_quantity = db.Column("Stock_quantity", db.Integer, nullable=True)
-    user_id = db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
-    date = db.Column("Date", DateTime, default=datetime.now())
+    game_outcome = db.Column("Win/Lose", db.String(10), nullable=False)
     user = db.relationship("User", lazy=True)
-
-    def __repr__(self):
-        return f"{self.id} - {self.transaction_amount}"
+    user_id = db.Column("user_id", db.Integer, db.ForeignKey("user.id"), nullable=False)
+    date = db.Column("Date", DateTime, default=datetime.now())
