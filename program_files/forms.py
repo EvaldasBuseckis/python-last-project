@@ -32,15 +32,3 @@ class LoginForm(FlaskForm):
 class GameForm(FlaskForm):
     guessed_letter = StringField("stock name", [DataRequired()])
     submit = SubmitField("get price")
-
-
-class TopUpForm(FlaskForm):
-    amount = FloatField("Amount", [DataRequired()])
-    submit = SubmitField("get price")
-
-
-class TradeForm(FlaskForm):
-    name = StringField("stock short name", [DataRequired()])
-    quantity = IntegerField("quantity", [DataRequired()])
-    buy_sell = SelectField("Operation", [DataRequired()], choices=["buy", "sell"])
-    submit = SubmitField("trade")

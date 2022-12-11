@@ -16,6 +16,7 @@ class Games(db.Model, UserMixin):
     __tablename__ = "game"
     id = db.Column(db.Integer, primary_key=True)
     game_outcome = db.Column("Win/Lose", db.String(10), nullable=False)
-    user = db.relationship("User", lazy=True)
+    secret_word = db.Column("Secret word", db.String(40), nullable=False)
     user_id = db.Column("user_id", db.Integer, db.ForeignKey("user.id"), nullable=False)
     date = db.Column("Date", DateTime, default=datetime.now())
+    user = db.relationship("User", lazy=True)

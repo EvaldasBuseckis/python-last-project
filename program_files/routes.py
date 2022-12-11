@@ -124,15 +124,24 @@ def add_char():
     if chance_lost==True:
         tries += 1
 
-        if tries==6:
+        if tries==10:
             game_outcome = Games(
-                game_outcome = "Lost"
+                game_outcome = "Lost",
+                secret_word=secret_word,
+                user_id=current_user.id
             )
             db.session.add(game_outcome)
             db.session.commit()
             return redirect('/game_lost')
 
     if blanks==0:
+        game_outcome = Games(
+                game_outcome = "Won",
+                secret_word=secret_word,
+                user_id=current_user.id
+            )
+        db.session.add(game_outcome)
+        db.session.commit()
         return redirect('/game_won')
 
     return render_template('hangman.html',to_display=to_display,word_set=word_set,tries="/static/img/hangman%d.png"%tries)
