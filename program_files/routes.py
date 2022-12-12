@@ -1,4 +1,4 @@
-from program_files import app, db, bcrypt, forms, TOKEN, functions
+from program_files import app, db, bcrypt, forms, functions
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
 from program_files.models import Games, User
@@ -63,9 +63,9 @@ def register():
 
 @app.route("/account_summary")
 @login_required
-def account_summary():
+def account_summary():  
     name = current_user.name
-
+    
     return render_template("summary.html", name=name)
 
 @app.route("/game_lost")

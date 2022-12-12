@@ -28,7 +28,3 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField("Remember me")
     submit = SubmitField("Log in")
 
-
-class GameForm(FlaskForm):
-    guessed_letter = StringField("stock name", [DataRequired()])
-    submit = SubmitField("get price")
