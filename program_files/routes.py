@@ -65,7 +65,7 @@ def register():
 @login_required
 def account_summary():  
     name = current_user.name
-    
+
     return render_template("summary.html", name=name)
 
 @app.route("/game_lost")
@@ -93,7 +93,7 @@ def hangman():
     word_set = "abcdefghijklmnopqrstuvwxyz"
     blanks = 0
     to_display = []
-    for i,char in enumerate(secret_word):
+    for char in enumerate(secret_word):
         if char==" ":
             to_display.append(" ")
         else:
