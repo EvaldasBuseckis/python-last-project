@@ -1,12 +1,9 @@
-# import configparser
 from flask import Flask
 import os
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
-# config = configparser.ConfigParser()
-# config.read("api.ini")
 TOKEN = os.getenv("TOKEN")
 FLASK_SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -21,7 +18,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 db.create_all()
 
-from program_files.models import User, Games
+from program_files.models import User
 
 bcrypt = Bcrypt(app)
 
