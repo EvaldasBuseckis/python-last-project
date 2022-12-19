@@ -62,7 +62,7 @@ def account_summary():
     for game in game_outcome:
         if game.game_outcome == "Win":
             games_won += 1
-        elif game.game_outcome == "Lost":
+        if game.game_outcome == "Lost":
             games_lost += 1
         
     name = current_user.name
