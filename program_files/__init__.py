@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
-TOKEN = os.getenv("TOKEN")
 FLASK_SECRET_KEY = os.getenv("SECRET_KEY")
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -12,7 +11,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config["SECRET_KEY"] = FLASK_SECRET_KEY
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    basedir, "trading_app.db"
+    basedir, "hangman.db"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)

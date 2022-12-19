@@ -2,9 +2,6 @@ from program_files import app, db, bcrypt, forms, functions
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user, login_user, logout_user
 from program_files.models import Games, User
-from datetime import datetime, timedelta
-import requests
-from requests.exceptions import ConnectionError
 
 secret_word = None
 word_set = None
@@ -28,12 +25,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
-            if current_user.is_authenticated:
-                print(current_user)
-            else:
-                print("no current user")
             next_page = request.args.get("next")
-            print("login successful")
             return redirect(next_page) if next_page else redirect(url_for("index"))
         else:
             flash("Login failure, please check details", "danger")
@@ -64,9 +56,19 @@ def register():
 @app.route("/account_summary")
 @login_required
 def account_summary():  
+    game_outcome = Games.query.filter_by(user_id=current_user.id).all()
+    games_won = 0
+    games_lost = 0
+    for game in game_outcome:
+        if game.game_outcome == "Win":
+            games_won += 1
+        elif game.game_outcome == "Lost":
+            games_lost += 1
+        
     name = current_user.name
 
-    return render_template("summary.html", name=name)
+    return render_template("summary.html", name=name,
+     games_won=games_won, games_lost=games_lost)
 
 @app.route("/game_lost")
 @login_required
